@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
+@st.cache_data
 def read_pdf(uploaded_file):
     try:
         pdf_reader = PdfReader(uploaded_file)
@@ -58,7 +59,13 @@ def get_ats_optimization_response(model, pdf_text, job_description):
 
 def main():
     st.title("ResumeATS Pro")
-
+    
+    # Initialize session state keys if they don't exist
+    if 'response' not in st.session_state:
+        st.session_state['ats_response'] = None
+    if 'pdf_text' not in st.session_state:
+        st.session_state['pdf_text'] = None
+    
     api_key = load_api_key()
     if not api_key:
         return
@@ -70,29 +77,31 @@ def main():
         pdf_text = read_pdf(uploaded_file)
         if not pdf_text:
             return
+        st.session_state['pdf_text'] = pdf_text
 
+    job_description = st.text_area("Paste the job description for ATS Optimization:")
     analysis_option = st.radio("Choose analysis type:", ["Quick Scan", "Detailed Analysis", "ATS Optimization"])
     
+            
     if st.button("Analyze Resume"):
         if uploaded_file is not None:
-            response = analyze_resume(model, pdf_text, analysis_option)
-            if response:
-                st.write(response)
+            with st.spinner('Analyzing resume...'):
+                if job_description and analysis_option == "ATS Optimization":
+                    ats_response = get_ats_optimization_response(model, pdf_text, job_description)
+                else:
+                    ats_response = analyze_resume(model, pdf_text, analysis_option)
+                if ats_response:
+                    st.session_state['ats_response'] = ats_response
+                    st.write(ats_response)
     
-    job_description = st.text_area("Paste the job description for ATS Optimization:")
-    if job_description and analysis_option == "ATS Optimization":
-        ats_response = get_ats_optimization_response(model, pdf_text, job_description)
-        if ats_response:
-            st.write(ats_response)
-
     user_question = st.text_input("Ask me anything about your resume or the analysis:")
     if user_question:
         chat_prompt = f"""
         Based on the resume and analysis above, answer the following question:
         {user_question}
         
-        Resume text: {pdf_text}
-        Previous analysis: {response}
+        Resume text: {st.session_state['pdf_text']}
+        Previous analysis: {st.session_state['ats_response']}
         """
         chat_response = analyze_resume(model, chat_prompt, "Custom Question")
         if chat_response:
