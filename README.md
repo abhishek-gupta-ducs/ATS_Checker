@@ -1,7 +1,6 @@
+# Resume Reviewer
 
-# ResumeATS Pro
-
-ResumeATS Pro is a Streamlit-based web application designed to help job seekers optimize their resumes for Applicant Tracking Systems (ATS). The app allows users to upload their resumes in PDF format, analyze them based on different criteria, and receive suggestions for improving their resume's ATS compatibility. Additionally, users can ask custom questions about their resume or the analysis provided.
+Resume Reviewer is a Streamlit-based web application designed to help job seekers optimize their resumes for Applicant Tracking Systems (ATS). The app allows users to upload their resumes in PDF format, analyze them based on different criteria, and receive suggestions for improving their resume's ATS compatibility. Additionally, users can ask custom questions about their resume or the analysis provided.
 
 ## Features
 
@@ -26,8 +25,8 @@ ResumeATS Pro is a Streamlit-based web application designed to help job seekers 
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/ResumeATS-Pro.git
-cd ResumeATS-Pro
+git clone https://github.com/abhishek-gupta-ducs/Resume-Reviewer
+cd Resume-Reviewer
 ```
 
 2. Install the required Python packages:
