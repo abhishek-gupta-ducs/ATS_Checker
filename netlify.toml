@@ -1,0 +1,15 @@
+[build]
+  # Set the build command to run Streamlit
+  command = "streamlit run app.py"
+
+  # Specify the directory where the build output is generated
+  publish = "."
+
+  # Set the Python version (optional but recommended)
+  python_version = "3.11"
+
+[[redirects]]
+  # Redirects all traffic to the Streamlit app
+  from = "/*"
+  to = "/"
+  status = 200
